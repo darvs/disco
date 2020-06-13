@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -e
+
+build() {
+  cd desmume/src/frontend/posix
+  ./autogen.sh
+  ./configure
+  make
+}
+
+echo trace
+/discobuild/setup.py
+exit 0
+
+cd /projects
+[ -d desmume ] || git clone --recursive https://github.com/TASVideos/desmume
+cd desmume
+
+sudo apt install -y build-essential autoconf automake libgtk2.0-dev libglu1-mesa-dev libsdl1.2-dev libglade2-dev gettext zlib1g-dev libosmesa6-dev intltool libagg-dev libasound2-dev libsoundtouch-dev libpcap-dev
+
+build
+
+# vim: ts=2 sw=2 et:

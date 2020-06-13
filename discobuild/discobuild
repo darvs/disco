@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -e
+
+echo $@
+PROJECT=${1}
+
+getent group abc 2>/dev/null || groupadd -g ${PGID} abc
+id -u ${PUID} 2>/dev/null || useradd -m -d /home/abc -p /bin/bash -g abc -u ${PUID} abc
+
+sudo -u abc -g abc /discobuild/setup.py "${PROJECT}"
+
+cat /tmp/Dockerfile
+
+cd /tmp
+DOCKER_BUILDKIT=0 docker build -t "disco-${PROJECT}" .
+
+#cat /tmp/build
+#chmod a+x /tmp/build
+
+#ls -laR /tmp/build
+  #-v /var/run/docker.sock:/var/run/docker.sock \
+
+
+time docker run -it --rm --privileged \
+  -e PUID=${PUID} \
+  -e PGID=${PGID} \
+  -v "${PRJDIR}":/projects \
+  disco-${PROJECT} \
+  bash -c "chmod a+x /tmp/build && cat /tmp/build && ls -la /projects && sudo -u \#${PUID} -g \#${PGID} /tmp/build" \
+  |& tee disco.log
+
+# vim: ts=2 sw=2 et:

@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+if [ -z "$1" ]; then
+  echo "usage: $0 <filename>"
+  echo "  where <filename> is a yaml file describing the project to build."
+  exit 1
+fi
+
+FILENAME="$1"
+
+if [ ! -f "${FILENAME}" ]; then
+  if [ -f "${FILENAME}.yaml" ]; then
+    FILENAME="${FILENAME}.yaml"
+  elif [ -f "${FILENAME}.yml" ]; then
+    FILENAME="${FILENAME}.yml"
+  else
+    echo "File: \"${FILENAME}\" does not exist"
+    exit 1
+  fi
+fi
+
+FILENAME="$(realpath "${FILENAME}")"
+BASENAME="$(basename ${FILENAME%.*})"
+echo File: \"${FILENAME}\" Base: \"${BASENAME}\"
+
+echo PWD is "${PWD}"
+
+DOCKER_BUILDKIT=0 docker build -t disco .
+
+time docker run -it --rm --privileged \
+  -e PUID=$(id -u) \
+  -e PGID=$(id -g) \
+  -e PRJDIR="${PWD}/projects" \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v "${PWD}/discobuild":/discobuild \
+  -v "${FILENAME}":/tmp/disco.yaml \
+  disco \
+	/discobuild/discobuild "${BASENAME}" \
+  |& tee disco.log
+
+# vim: ts=2 sw=2 et:
