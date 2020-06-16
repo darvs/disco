@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -e
+
+cd /src
+[ -d "${PROJECT}" ] || git clone --recursive "${REPO}"
+cd "${PROJECT}/"
+
+source /tmp/build

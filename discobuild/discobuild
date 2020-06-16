@@ -1,21 +1,18 @@
 #!/usr/bin/env bash
 set -e
 
-echo $@
 PROJECT=${1}
 
-sudo -u \#${PUID} -g \#${PGID} /discobuild/setup.py "${PROJECT}"
-
 cd /tmp
+
+/discobuild/setup.py
+
 DOCKER_BUILDKIT=0 docker build -t "disco-${PROJECT}" .
 
-time docker run -it --rm --privileged \
-  -e PUID=${PUID} \
-  -e PGID=${PGID} \
-  -v "${PRJDIR}":/projects \
+time docker run -it --rm \
+  -v "${PRJDIR}":"/src" \
   -v "${DISCOBUILDDIR}":/discobuild \
   disco-${PROJECT} \
-  bash -c "sudo -u \#${PUID} -g \#${PGID} /tmp/build" \
   |& tee disco.log
 
 # vim: ts=2 sw=2 et:

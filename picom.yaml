@@ -6,5 +6,5 @@ packages: 'gcc cmake meson ninja-build libxext-dev libxcb1-dev libxcb-damage0-de
 build: |
   git submodule update --init --recursive
   meson --buildtype=release . build 
-  meson configure -Dprefix=/projects/picom/install build
+  meson configure -Dprefix=/src/install build
   ninja -C build install
