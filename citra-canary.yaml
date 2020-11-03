@@ -7,7 +7,7 @@ build: |
   mkdir -p install
   mkdir -p build
   cd build
-  cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/src/install -DENABLE_FFMPEG_AUDIO_DECODER=ON 
+  cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/projects/install -DENABLE_FFMPEG_AUDIO_DECODER=ON 
   make
   make installer
   make install
