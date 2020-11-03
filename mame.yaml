@@ -1,0 +1,7 @@
+repo: 
+  url: '--branch mame0226 --single-branch https://github.com/mamedev/mame.git'
+
+packages: 'git build-essential python libsdl2-dev libsdl2-ttf-dev libfontconfig-dev qt5-default'
+
+build: |
+  make -j5
