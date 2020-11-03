@@ -1,0 +1,7 @@
+repo: 
+  url: 'https://github.com/ecraven/g13.git'
+
+packages: 'gcc libusb-1.0-0-dev libboost-all-dev' 
+
+build: |
+  make
