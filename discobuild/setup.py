@@ -7,6 +7,8 @@ with open('/tmp/disco.yaml') as f:
     print(data)
 
     project = sys.argv[1]
+    # puid = sys.argv[2]
+    # pgid = sys.argv[3]
     repo = data['repo']['url']
     packages = data['packages']
     build = data['build']
@@ -29,8 +31,10 @@ with open('/tmp/disco.yaml') as f:
             writeln('  echo ' + re.escape(s) + '>> /tmp/build && \\')
             
         writeln('FROM disco')
-        writeln('RUN \\\n')
-        writeln(f'  DEBIAN_FRONTEND=noninteractive apt install -y {packages}\n')
+        writeln('RUN \\')
+        #writeln(f' getent group abc 2>/dev/null || groupadd -g {pgid} abc \\')
+        #writeln(f' id -u {puid} 2>/dev/null || useradd -m -d /home/abc -p /bin/bash -g abc -u {puid} abc \\')
+        writeln(f'  DEBIAN_FRONTEND=noninteractive apt install -y {packages}')
 
         writeln('RUN \\')
         writeln('  [ ! -f /tmp/build ] || rm /tmp/build && \\')

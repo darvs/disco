@@ -4,10 +4,10 @@ set -e
 echo $@
 PROJECT=${1}
 
-getent group abc 2>/dev/null || groupadd -g ${PGID} abc
-id -u ${PUID} 2>/dev/null || useradd -m -d /home/abc -p /bin/bash -g abc -u ${PUID} abc
+#getent group abc 2>/dev/null || groupadd -g ${PGID} abc
+#id -u ${PUID} 2>/dev/null || useradd -m -d /home/abc -p /bin/bash -g abc -u ${PUID} abc
 
-sudo -u abc -g abc /discobuild/setup.py "${PROJECT}"
+sudo -u \#${PUID} -g \#${PGID} /discobuild/setup.py "${PROJECT}" "${PUID}" "${PGID}"
 
 cat /tmp/Dockerfile
 
@@ -24,9 +24,11 @@ DOCKER_BUILDKIT=0 docker build -t "disco-${PROJECT}" .
 time docker run -it --rm --privileged \
   -e PUID=${PUID} \
   -e PGID=${PGID} \
+  -v /etc/passwd:/etc/passwd:ro \
+  -v /etc/group:/etc/group:ro \
   -v "${PRJDIR}":/projects \
   disco-${PROJECT} \
-  bash -c "chmod a+x /tmp/build && cat /tmp/build && ls -la /projects && sudo -u \#${PUID} -g \#${PGID} /tmp/build" \
+  bash -c "chmod a+x /tmp/build && cat /tmp/build && ls -la /projects && id && sudo -u \#${PUID} -g \#${PGID} /tmp/build" \
   |& tee disco.log
 
 # vim: ts=2 sw=2 et:
