@@ -6,5 +6,6 @@ packages: 'build-essential autoconf automake libgtk2.0-dev libglu1-mesa-dev libs
 build: |
   cd desmume/src/frontend/posix
   ./autogen.sh
-  ./configure
+  ./configure --prefix=/src/install
   make
+  make install

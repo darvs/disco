@@ -26,14 +26,21 @@ echo File: \"${FILENAME}\" Base: \"${BASENAME}\"
 
 echo PWD is "${PWD}"
 
-DOCKER_BUILDKIT=0 docker build -t disco .
+PUID=$(id -u)
+PGID=$(id -g)
+
+DOCKER_BUILDKIT=0 docker build -t disco --build-arg PGID=${PGID} --build-arg PUID=${PUID} .
+
+mkdir -p "${PWD}/projects/${BASENAME}"
 
 time docker run -it --rm --privileged \
-  -e PUID=$(id -u) \
-  -e PGID=$(id -g) \
+  -e PUID=${PUID} \
+  -e PGID=${PGID} \
   -v /etc/passwd:/etc/passwd:ro \
   -v /etc/group:/etc/group:ro \
-  -e PRJDIR="${PWD}/projects" \
+  -e PROJECT="${BASENAME}" \
+  -e PRJDIR="${PWD}/projects/${BASENAME}" \
+  -e DISCOBUILDDIR="${PWD}/discobuild" \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v "${PWD}/discobuild":/discobuild \
   -v "${FILENAME}":/tmp/disco.yaml \

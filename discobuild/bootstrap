@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -e
+
+echo export:
+export
+echo ---
+echo set:
+set
+
+cd /projects
+[ -d "${PROJECT}" ] || git clone --recursive "${REPO}"
+cd "${PROJECT}/"
+
+source /tmp/build
