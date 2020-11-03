@@ -1,0 +1,11 @@
+repo: 
+  url: 'https://github.com/citra-emu/citra-canary'
+
+packages: 'clang libc++-dev cmake libsdl2-dev qtbase5-dev libqt5opengl5-dev qtmultimedia5-dev libfdk-aac-dev ffmpeg libswscale-dev libavdevice58 libavformat-dev libavcodec-dev libavdevice-dev'  
+
+build: |
+  mkdir build
+  cd build
+  cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_FFMPEG_AUDIO_DECODER=ON 
+  make
+  make installer
