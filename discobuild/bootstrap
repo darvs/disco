@@ -8,7 +8,7 @@ echo set:
 set
 
 cd /projects
-[ -d "${PROJECT}" ] || git clone --recursive "${REPO}"
+[ -d "${PROJECT}" ] || sh -c "git clone --recursive ${REPO}"
 cd "${PROJECT}/"
 
 source /tmp/build
