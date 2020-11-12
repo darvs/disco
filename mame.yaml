@@ -1,7 +1,11 @@
 repo: 
-  url: '--branch mame0226 --single-branch https://github.com/mamedev/mame.git'
+  url: '--branch mame0226 --depth 1 https://github.com/mamedev/mame.git'
+#  url: '--branch mame0226 --single-branch https://github.com/mamedev/mame.git'
 
 packages: 'git build-essential python libsdl2-dev libsdl2-ttf-dev libfontconfig-dev qt5-default'
 
 build: |
-  make -j5
+  #cd /projects/mame
+  #make clean
+  #find / -name mame.lua
+  PROJECT= CXXFLAGS="-U_FORTIFY_SOURCE -Winvalid-pch" make REGENIE=1 TOOLS=1 -j5 
